@@ -1,9 +1,6 @@
 class InstancesController < ApplicationController
-  before_action :set_instance, only: %i[ show update destroy ]
-
-  # GET /instances
   def index
-    @instances = Instance.all
+    @instances = Instance.includes(:configuration_object).all
 
     render json: @instances
   end
@@ -25,13 +22,6 @@ class InstancesController < ApplicationController
   end
 
   # PATCH/PUT /instances/1
-  def update
-    if @instance.update(instance_params)
-      render json: @instance
-    else
-      render json: @instance.errors, status: :unprocessable_entity
-    end
-  end
 
   # DELETE /instances/1
   def destroy
@@ -39,12 +29,6 @@ class InstancesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_instance
-      @instance = Instance.find(params[:id])
-    end
-
-    # Only allow a list of trusted parameters through.
     def instance_params
       params.require(:instance).permit(:id, :cloud, :region, :shade_instance_type, :cloud_instance_type, :cloud_assigned_id, :shade_cloud, :name, :configuration_object_id, :ip, :ssh_user, :ssh_port, :status, :cost_estimate, :created_at, :deleted_at)
     end

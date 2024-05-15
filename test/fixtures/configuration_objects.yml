@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  memory_in_gb: 1
+  storage_in_gb: 1
+  vcpus: 1
+  num_gpus: 1
+  gpu_type: MyString
+  interconnect: MyString
+  vram_per_gpu_in_gb: 1
+  os: MyString
+  instance_id: 1
+
+two:
+  memory_in_gb: 1
+  storage_in_gb: 1
+  vcpus: 1
+  num_gpus: 1
+  gpu_type: MyString
+  interconnect: MyString
+  vram_per_gpu_in_gb: 1
+  os: MyString
+  instance_id: 1
