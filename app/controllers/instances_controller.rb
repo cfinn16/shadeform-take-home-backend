@@ -2,7 +2,7 @@ class InstancesController < ApplicationController
   def index
     @instances = Instance.includes(:configuration_object).all
 
-    render json: @instances
+    render json: @instances.as_json(include: :configuration_object)
   end
 
   # GET /instances/1
