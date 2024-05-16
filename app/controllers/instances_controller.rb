@@ -3,7 +3,12 @@ class InstancesController < ApplicationController
   def index
     @instances = Instance.limit(params[:limit]).offset(params[:offset])
 
-    render json: @instances.as_json(include: :configuration_object)
+    response = {
+      instances: @instances.as_json(include: :configuration_object),
+      count: Instance.count
+    }
+
+    render json: response
   end
 
   # GET /instances/1
@@ -14,8 +19,20 @@ class InstancesController < ApplicationController
   # POST /instances
   def create
     @instance = Instance.new(instance_params)
+    @instance.ip = Faker::Internet.ip_v4_address
 
     if @instance.save
+        ConfigurationObject.create!(
+          memory_in_gb: Faker::Number.between(from: 1, to: 500),
+          storage_in_gb: Faker::Number.between(from: 1, to: 500),
+          vcpus: Faker::Number.between(from: 1, to: 10),
+          num_gpus: Faker::Number.between(from: 1, to: 10),
+          gpu_type: "A100",
+          interconnect: "pcie",
+          vram_per_gpu_in_gb: Faker::Number.between(from: 1, to: 100),
+          os: "ubuntu_22_shade_os",
+          instance_id: @instance.id
+      )
       render json: @instance, status: :created, location: @instance
     else
       render json: @instance.errors, status: :unprocessable_entity
