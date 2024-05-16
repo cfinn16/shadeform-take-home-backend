@@ -1,6 +1,7 @@
 class InstancesController < ApplicationController
+  before_action :set_instance, only: %i[ destroy ]
   def index
-    @instances = Instance.includes(:configuration_object).all
+    @instances = Instance.limit(params[:limit]).offset(params[:offset])
 
     render json: @instances.as_json(include: :configuration_object)
   end
@@ -29,6 +30,10 @@ class InstancesController < ApplicationController
   end
 
   private
+    def set_instance
+      @instance = Instance.find(params[:id])
+    end
+
     def instance_params
       params.require(:instance).permit(:id, :cloud, :region, :shade_instance_type, :cloud_instance_type, :cloud_assigned_id, :shade_cloud, :name, :configuration_object_id, :ip, :ssh_user, :ssh_port, :status, :cost_estimate, :created_at, :deleted_at)
     end
